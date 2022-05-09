@@ -27,7 +27,7 @@ def show_map():
             filtered_points = Model.filter_points_by_accuracy(points, 5, 5)
             #print(filtered_points)
             folium_map = View.create_map(filtered_points,
-                                         Model.avg_latlong(filtered_points), plot_points=True)
+                                         Model.avg_latlong(filtered_points), plot_marks=True)
             return render_template("map.html", folium_map=folium_map) # Display the map
         except Exception as error:
             flash("Error in decoding stage:" + repr(error))
