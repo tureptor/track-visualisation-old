@@ -1,3 +1,4 @@
+from email.policy import default
 from flask import Flask, render_template, request, flash
 import folium
 import View
@@ -8,10 +9,12 @@ app = Flask(__name__)
 app.secret_key = "sEcrEt.kEy" # Necessary for flash to work (ideally should be encrypted)
 app.debug = True
 
+default_map = folium.Map(location=[48, -102], zoom_start=3)._repr_html_()
+
 @app.route("/")
 @app.route("/home")
 def index():
-  return render_template("home.html")
+  return render_template("map.html", folium_map=default_map)
   
 @app.route("/", methods=["GET", "POST"])
 def show_map():
@@ -34,7 +37,7 @@ def show_map():
     except Exception as error:
       flash("The following error occured: " + repr(error)) # Display an error message
     
-  return render_template("home.html") # If an error occured, simply load the original page
+  return render_template("map.html", folium_map=default_map) # If an error occured, simply load the original page
 
   
 
