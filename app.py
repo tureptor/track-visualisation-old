@@ -21,10 +21,10 @@ def show_map():
     flash(file.filename)
 
     showMarkers = 'showMarkers' in request.form
+    varyMarkerSize = 'varyMarkerSize' in request.form
     minHorizontalAcc = int(request.form["minHorizontalAcc"])
     minVerticalAcc = int(request.form["minVerticalAcc"])
-
-    print(minHorizontalAcc, minVerticalAcc)
+    maxTimeGap = int(request.form["maxTimeGap"])
 
     if "file" not in request.files:
         flash('No file part')
@@ -33,11 +33,10 @@ def show_map():
     else:
         try:
             points = Model.file_to_points(file)
-            bunches = Model.group_adjacent_points(points)
+            bunches = Model.group_adjacent_points(points, maxTimeGap)
             filtered_points = Model.filter_bunches_by_accuracy(bunches, minHorizontalAcc, minVerticalAcc)
-            #print(filtered_points)
             folium_map = View.create_map(filtered_points,
-                                         Model.avg_latlong(filtered_points), showMarkers)
+                                         Model.avg_latlong(filtered_points), showMarkers, varyMarkerSize)
             return render_template("map.html", folium_map=folium_map) # Display the map
         except Exception as error:
             flash("Error in decoding stage:" + repr(error))

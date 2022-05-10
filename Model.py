@@ -73,6 +73,3 @@ def filter_bunches_by_accuracy(bunches, min_hori_accu, min_vert_accu):
                 break
     filtered_points.sort(key=(lambda e: e["time"]))
     return filtered_points
-
-def group_by_time():
-    return []
