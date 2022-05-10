@@ -9,7 +9,7 @@
     </div>
 
     <div>
-      <input type="checkbox" name="varyMarkerSize" checked>
+      <input type="checkbox" name="varyMarkerSize">
       <label for="varyMarkerSize">Reflect uncertainty in marker radius</label>
     </div>
 
@@ -19,12 +19,12 @@
     </div>
     
     <div>
-      <input type="number" min="1" max="100" value="5" name="minVerticalAcc">
+      <input type="number" min="1" max="100" value="{{request.form['minVerticalAcc']}}" name="minVerticalAcc">
       <label for="minVerticalAcc" class="form-label">Min Vertical Accurracy</label>
     </div>
 
     <div>
-      <input type="number" min="0" max="10000" value="5" name="maxTimeGap">
+      <input type="number" min="0" max="10000" value="{{request.form['maxTimeGap']}}" name="maxTimeGap">
       <label for="maxTimeGap" class="form-label">Group entries within x secs</label>
     </div>
     
