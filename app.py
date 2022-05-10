@@ -9,6 +9,7 @@ app.secret_key = "sEcrEt.kEy" # Necessary for flash to work (ideally should be e
 app.debug = True
 
 default_map = folium.Map(location=[48, -102], zoom_start=3)._repr_html_()
+
 @app.route("/")
 @app.route("/home")
 def index():
@@ -18,24 +19,28 @@ def index():
 def show_map():
     file = request.files['file']
     flash(file.filename)
+
+    showMarkers = 'showMarkers' in request.form
+    minHorizontalAcc = int(request.form["minHorizontalAcc"])
+    minVerticalAcc = int(request.form["minVerticalAcc"])
+
+    print(minHorizontalAcc, minVerticalAcc)
+
     if "file" not in request.files:
         flash('No file part')
         return redirect(request.url)
+
     else:
         try:
             points = Model.file_to_points(file)
-            filtered_points = Model.filter_points_by_accuracy(points, 5, 5)
-            #print(filtered_points)
+            filtered_points = Model.filter_points_by_accuracy(points, minHorizontalAcc, minVerticalAcc)
             folium_map = View.create_map(filtered_points,
-                                         Model.avg_latlong(filtered_points), False)
+                                         Model.avg_latlong(filtered_points), showMarkers)
             return render_template("map.html", folium_map=folium_map) # Display the map
         except Exception as error:
             flash("Error in decoding stage:" + repr(error))
 
     return render_template("map.html", folium_map=default_map) # If an error occured, simply load the original page
-
-
-    
 
 if __name__ == "__main__":
     app.run()

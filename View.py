@@ -21,7 +21,7 @@ def createMarker(m,data):
     popup=folium.Popup(iframe)
     Text=folium.Marker(location=data["latlong"],popup=popup, tooltip="Click for more information.",icon=folium.Icon(color="gray"))
     m.add_child(Text)
-    print("added", (data["GPSPosition"]["latitude"],data["GPSPosition"]["longitude"]), data["Timestamp"]["timestamp"])
+    #print("added", (data["GPSPosition"]["latitude"],data["GPSPosition"]["longitude"]), data["Timestamp"]["timestamp"])
     
 def createLine(m,path):
     m.add_child(folium.PolyLine(path))
