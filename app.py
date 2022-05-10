@@ -33,7 +33,9 @@ def show_map():
     else:
         try:
             points = Model.file_to_points(file)
-            filtered_points = Model.filter_points_by_accuracy(points, minHorizontalAcc, minVerticalAcc)
+            bunches = Model.group_adjacent_points(points)
+            filtered_points = Model.filter_bunches_by_accuracy(bunches, minHorizontalAcc, minVerticalAcc)
+            #print(filtered_points)
             folium_map = View.create_map(filtered_points,
                                          Model.avg_latlong(filtered_points), showMarkers)
             return render_template("map.html", folium_map=folium_map) # Display the map
