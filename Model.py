@@ -52,14 +52,17 @@ def group_adjacent_points(entries, max_gap = 5):
     return bunches
 
 def avg_latlong(entries):
-    count = 0
     total_lat = 0
     total_long = 0
     for e in entries:
         lat,long = e["latlong"]
         total_lat += lat
         total_long += long
-        count += 1
+     
+    count = len(entries)
+    if count == 0:
+        return (0, 0)
+    
     return (total_lat/count, total_long/count)
 
 def filter_bunches_by_accuracy(bunches, min_hori_accu, min_vert_accu):
