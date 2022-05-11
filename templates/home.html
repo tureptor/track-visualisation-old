@@ -4,27 +4,27 @@
   <form method="post" enctype=multipart/form-data>
     <input type=file name=file placeholder="Street Name" required="" autofocus="" style="width: 100%; margin-top: 10px;">
     <div>
-      <input type="checkbox" name="showMarkers" checked>
+      <input type="checkbox" name="showMarkers" {{ "checked" if showMarkers else "" }}>
       <label for="showMarkers">Show Markers?</label>
     </div>
 
     <div>
-      <input type="checkbox" name="varyMarkerSize">
+      <input type="checkbox" name="varyMarkerSize" {{ "checked" if varyMarkerSize else "" }}>
       <label for="varyMarkerSize">Reflect uncertainty in marker radius</label>
     </div>
 
     <div>
-      <input type="number" min="1" max="100" value="{{request.form['minHorizontalAcc']}}" name="minHorizontalAcc">
+      <input type="number" min="1" max="100" value="{{minHorizontalAcc}}" name="minHorizontalAcc">
       <label for="minHorizontalAcc" class="form-label">Min Horizontal Accuracy(m)</label>
     </div>
     
     <div>
-      <input type="number" min="1" max="100" value="{{request.form['minVerticalAcc']}}" name="minVerticalAcc">
+      <input type="number" min="1" max="100" value="{{minVerticalAcc}}" name="minVerticalAcc">
       <label for="minVerticalAcc" class="form-label">Min Vertical Accuracy(m)</label>
     </div>
 
     <div>
-      <input type="number" min="0" max="10000" value="{{request.form['maxTimeGap']}}" name="maxTimeGap">
+      <input type="number" min="0" max="10000" value="{{maxTimeGap}}" name="maxTimeGap">
       <label for="maxTimeGap" class="form-label">Group entries within x secs</label>
     </div>
     

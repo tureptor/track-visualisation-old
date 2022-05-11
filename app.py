@@ -13,15 +13,16 @@ default_map = folium.Map(location=[48, -102], zoom_start=3)._repr_html_()
 @app.route("/")
 @app.route("/home")
 def index():
-    return render_template("map.html", folium_map=default_map)
+    return render_template("map.html", folium_map=default_map, showMarkers=True, varyMarkerSize=False, 
+                                         minHorizontalAcc=100, minVerticalAcc=100, maxTimeGap=1)
     
 @app.route("/", methods=["GET", "POST"])
 def show_map():
     file = request.files['file']
     flash(file.filename)
 
-    showMarkers = 'showMarkers' in request.form
-    varyMarkerSize = 'varyMarkerSize' in request.form
+    showMarkers = request.form.get("showMarkers")
+    varyMarkerSize = request.form.get("varyMarkerSize")
     minHorizontalAcc = int(request.form["minHorizontalAcc"])
     minVerticalAcc = int(request.form["minVerticalAcc"])
     maxTimeGap = int(request.form["maxTimeGap"])
@@ -37,11 +38,13 @@ def show_map():
             filtered_points = Model.filter_bunches_by_accuracy(bunches, minHorizontalAcc, minVerticalAcc)
             folium_map = View.create_map(filtered_points,
                                          Model.avg_latlong(filtered_points), showMarkers, varyMarkerSize)
-            return render_template("map.html", folium_map=folium_map) # Display the map
+            return render_template("map.html", folium_map=folium_map, showMarkers=showMarkers, varyMarkerSize = varyMarkerSize,
+                                                 minHorizontalAcc=minHorizontalAcc, minVerticalAcc=minVerticalAcc, maxTimeGap=maxTimeGap) # Display the map
         except Exception as error:
             flash("Error in decoding stage:" + repr(error))
 
-    return render_template("map.html", folium_map=default_map) # If an error occured, simply load the original page
+    return render_template("map.html", folium_map=default_map, showMarkers=True,
+                                        varyMarkerSize = False, minHorizontalAcc=100, minVerticalAcc=100, maxTimeGap=1) # If an error occured, simply load the original page
 
 if __name__ == "__main__":
     app.run()
