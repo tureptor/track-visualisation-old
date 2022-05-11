@@ -1,7 +1,16 @@
 import folium
+import colorsys
+from colorsys import hls_to_rgb
 from datetime import datetime
 from folium import IFrame, plugins
 from flask import Flask, render_template, request, flash
+
+def battery_to_colour(battery):
+    battery_corrected=battery*0.0028
+    r,g,b=hls_to_rgb(battery_corrected,0.54,1)
+    r=round(r*255)
+    g=round(g*255)
+    return "#" + str(hex(r))[-2:] + str(hex(g))[-2:]+ "00"
 
 def create_map(markers, location=[0, 0], plot_marks=True, vary_size=False):
     tileLayers = [
@@ -58,7 +67,7 @@ def createMarker(m,data,is_endpoint,vary_size):
     text="Battery: "+str(data["battery"])+"%<br>Date: "+str(datetime.fromtimestamp(data["time"]))
     iframe=folium.IFrame(text, width=200,height=100)
     popup=folium.Popup(iframe)
-    color = "#"+str(hex(round(data["battery"]*2.55)))[-2:] * 3
+    color = battery_to_colour(data["battery"])
     if is_endpoint:
         folium.Marker(location=data["latlong"],popup=popup,color=color).add_to(m)
     elif vary_size: # make accuracy affect size
@@ -68,5 +77,5 @@ def createMarker(m,data,is_endpoint,vary_size):
     
 def createLine(m,start,end):
     path = [start["latlong"], end["latlong"]]
-    color = "#" + str(hex(round(start["battery"]*2.55)))[-2:] * 3
+    color = battery_to_colour(start["battery"])
     m.add_child(folium.PolyLine(path, color=color))
